@@ -45,7 +45,10 @@
     // 使用全局函数改变 Editor 的语言
     monaco.editor.setModelLanguage(monacoEditor.getEditor().getModel(), 'plaintext')
 
-为了方便起见，组件上也封装了 `value` 属性，所以下面的方式也是可以的：
+为了方便起见，组件上也封装了 `value` 和 `language` 属性，所以下面的方式也是可以的：
 
     monacoEditor.getValue() // 获取内容
     monacoEditor.setValue(value) // 设置内容
+
+    monacoEditor.getLanguage() // 获取语言
+    monacoEditor.setLanguage(lang) // 设置语言

@@ -136,8 +136,8 @@ def(ui.MonacoEditor, ht.ui.HtmlView, {\n\
 
             monacoEditor1 = new ht.ui.MonacoEditor();
             monacoEditor2 = new ht.ui.MonacoEditor();
-            monacoEditor1.getEditor().setValue(source1);
-            monacoEditor2.getEditor().setValue('var node = new ht.Node();\nnode.setName("Node");\ndataModel.add(node);');
+            monacoEditor1.setValue(source1);
+            monacoEditor2.setValue('var node = new ht.Node();\nnode.setName("Node");\ndataModel.add(node);');
             
             tabLayout.addView(monacoEditor1, {
                 title: 'MonacoEditor.js'

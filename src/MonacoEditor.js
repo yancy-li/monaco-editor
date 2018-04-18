@@ -1,9 +1,13 @@
-ui.MonacoEditor = function () {
+ui.MonacoEditor = function (monaco) {
     var self = this,
         editorDiv = document.createElement('div');
     editorDiv.style.width = '100%';
     editorDiv.style.height = '100%';
     ht.ui.MonacoEditor.superClass.constructor.call(self);
+
+    if (!monaco) monaco = window.monaco;
+    
+    self.monacoPkg = monaco;
 
     self.setContent(editorDiv);
 
@@ -58,6 +62,14 @@ def(ui.MonacoEditor, ht.ui.HtmlView, {
         return this.getValue();
     },
 
+    getLanguage: function() {
+        return this.getEditor().getModel().getLanguageIdentifier().language;
+    },
+
+    setLanguage: function(lang) {
+        this.monacoPkg.editor.setModelLanguage(this.getEditor().getModel(), lang);
+    },
+
     validateImpl: function (x, y, width, height) {
         var self = this,
             editor = self._editor;
@@ -74,7 +86,8 @@ def(ui.MonacoEditor, ht.ui.HtmlView, {
         var parentProperties = ui.MonacoEditor.superClass.getSerializableProperties.call(this);
         return ht.Default.addMethod(parentProperties, {
             value: 1,
-            formDataName: 1
+            formDataName: 1,
+            language: 1
         });
     }
 });

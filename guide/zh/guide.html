@@ -220,10 +220,13 @@ monacoEditor.getEditor().setValue(value) // 设置内容
 // 使用全局函数改变 Editor 的语言
 monaco.editor.setModelLanguage(monacoEditor.getEditor().getModel(), &#39;plaintext&#39;)</code></pre>
 
-<p>为了方便起见，组件上也封装了 <code>value</code> 属性，所以下面的方式也是可以的：</p>
+<p>为了方便起见，组件上也封装了 <code>value</code> 和 <code>language</code> 属性，所以下面的方式也是可以的：</p>
 
 <pre><code>monacoEditor.getValue() // 获取内容
-monacoEditor.setValue(value) // 设置内容</code></pre>    <hr id="contact" style="margin: 20px 0 1px 0">
+monacoEditor.setValue(value) // 设置内容
+
+monacoEditor.getLanguage() // 获取语言
+monacoEditor.setLanguage(lang) // 设置语言</code></pre>    <hr id="contact" style="margin: 20px 0 1px 0">
     <a href="http://www.hightopo.com"><img class="logo"></a>欢迎交流 <a href="mailto:service@hightopo.com">service@hightopo.com</a>
 </body>
 </html>
