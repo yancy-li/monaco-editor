@@ -1,0 +1,6 @@
+lib
+/build
+guide/zh/examples/package
+jsdoc
+release
+node_modules

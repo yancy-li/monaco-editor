@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>MonacoEditor</title>
+    <style>
+        html,
+        body {
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <link rel="stylesheet" data-name="vs/editor/editor.main" href="./package/min/vs/editor/editor.main.css">
+    <script>
+        var require = {
+            paths: {
+                'vs': './package/min/vs'
+            }
+        };
+    </script>
+    <script src="./package/min/vs/loader.js"></script>
+    <script src="./package/min/vs/editor/editor.main.nls.js"></script>
+    <script src="./package/min/vs/editor/editor.main.js"></script>
+    <script>
+        var source1 = "ui.MonacoEditor = function () {\n\
+    var self = this,\n\
+        editorDiv = document.createElement('div');\n\
+    editorDiv.style.width = '100%';\n\
+    editorDiv.style.height = '100%';\n\
+    ht.ui.MonacoEditor.superClass.constructor.call(self);\n\
+    \n\
+    self.setContent(editorDiv);\n\
+    \n\
+    self._editor = monaco.editor.create(editorDiv, {\n\
+        language: 'javascript'\n\
+    });\n\
+    \n\
+    // 组件宽度和高度变化时要设置一个标记通知 Editor 更新\n\
+    self.addPropertyChangeListener(function (e) {\n\
+        var property = e.property;\n\
+        if (property === 'width' || property === 'height') {\n\
+            self._resizeEditor = true;\n\
+        }\n\
+    });\n\
+    \n\
+};\n\
+\n\
+def(ui.MonacoEditor, ht.ui.HtmlView, {\n\
+    \n\
+    _formDataValueProps: {\n\
+        value: true\n\
+    },\n\
+    \n\
+    getEditor: function () {\n\
+        return this._editor;\n\
+    },\n\
+    \n\
+    \n\
+    getFormDataProperties: function () {\n\
+        return this._formDataValueProps;\n\
+    },\n\
+    \n\
+    setValue: function (value) {\n\
+        var oldValue = this.getValue();\n\
+        if (oldValue !== value) {\n\
+            this._editor.setValue(value);\n\
+            this.fp('value', oldValue, value);\n\
+        }\n\
+    },\n\
+    \n\
+    getValue: function () {\n\
+        return this._editor.getValue();\n\
+    },\n\
+    \n\
+    setFormDataValue: function (value) {\n\
+        this.setValue(value);\n\
+    },\n\
+    \n\
+    getFormDataValue: function () {\n\
+        return this.getValue();\n\
+    },\n\
+    \n\
+    validateImpl: function (x, y, width, height) {\n\
+        var self = this,\n\
+            editor = self._editor;\n\
+            \n\
+        ht.ui.MonacoEditor.superClass.validateImpl.call(self, x, y, width, height);\n\
+        \n\
+        if (self._resizeEditor) {\n\
+            editor.layout();\n\
+            delete self._resizeEditor;\n\
+        }\n\
+    }\n\
+});";
+    </script>
+    <script src="../../../../lib/ht.js"></script>
+    <script src="../../../../lib/ht-ui.js"></script>
+    <script src="../../../lib/ht-ui-monaco-editor.js"></script>
+    <script>
+        function init() {
+            borderLayout = new ht.ui.BorderLayout();
+            borderLayout.setSplitterVisible(false);
+            menu = new ht.ui.Menu();
+            menu.setItems([{
+                    label: '文件',
+                    items: [{
+                            label: '新建'
+                        },
+                        {
+                            label: '打开'
+                        },
+                        {
+                            label: '保存'
+                        }
+                    ]
+                },
+                {
+                    label: '编辑',
+                    items: [{
+                            label: '复制'
+                        },
+                        {
+                            label: '剪切'
+                        },
+                        {
+                            label: '粘贴'
+                        }
+                    ]
+                }
+            ]);
+
+            tabLayout = new ht.ui.TabLayout();
+
+            monacoEditor1 = new ht.ui.MonacoEditor();
+            monacoEditor2 = new ht.ui.MonacoEditor();
+            monacoEditor1.getEditor().setValue(source1);
+            monacoEditor2.getEditor().setValue('var node = new ht.Node();\nnode.setName("Node");\ndataModel.add(node);');
+            
+            tabLayout.addView(monacoEditor1, {
+                title: 'MonacoEditor.js'
+            });
+            tabLayout.addView(monacoEditor2, {
+                title: 'test.js'
+            });
+            tabLayout.setActiveView(monacoEditor1);
+
+            borderLayout.addView(menu, {
+                region: 'top'
+            });
+
+            borderLayout.addView(tabLayout, {
+                region: 'center'
+            });
+
+            borderLayout.addToDOM();
+        }
+    </script>
+</head>
+
+<body onload="init();">
+
+</body>
+
+</html>
