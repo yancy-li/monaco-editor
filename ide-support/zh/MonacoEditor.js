@@ -50,3 +50,17 @@ ht.ui.MonacoEditor.prototype.getFormDataValue = function (){};
  * @param {String} value 值
  */
 ht.ui.MonacoEditor.prototype.setFormDataValue = function (value){};
+
+
+/**
+ * 获取当前编辑器中的语言
+ * @return {String} 语言，默认为 javascript
+ */
+ht.ui.MonacoEditor.prototype.getLanguage = function (){};
+
+
+/**
+ * 设置当前编辑器中的语言
+ * @param {String} lang 语言
+ */
+ht.ui.MonacoEditor.prototype.setLanguage = function (lang){};
