@@ -11,8 +11,14 @@ ui.MonacoEditor = function (monaco) {
 
     self.setContent(editorDiv);
 
-    self._editor = monaco.editor.create(editorDiv, {
+    var editor = self._editor = monaco.editor.create(editorDiv, {
         language: 'javascript'
+    });
+
+    editor.onDidChangeModelContent(function(e) {
+        self._syncToHT = true;
+        self.setValue(editor.getValue());
+        self._syncToHT = false;
     });
 
     // 组件宽度和高度变化时要设置一个标记通知 Editor 更新
@@ -22,12 +28,11 @@ ui.MonacoEditor = function (monaco) {
             self._resizeEditor = true;
         }
     });
-
 };
 
 def(ui.MonacoEditor, ht.ui.HtmlView, {
 
-    ms_ac: ['formDataName'],
+    ms_ac: ['formDataName', 'value'],
 
     _formDataValueProps: {
         value: true
@@ -37,21 +42,16 @@ def(ui.MonacoEditor, ht.ui.HtmlView, {
         return this._editor;
     },
 
-
     getFormDataProperties: function () {
         return this._formDataValueProps;
     },
 
-    setValue: function (value) {
-        var oldValue = this.getValue();
-        if (oldValue !== value) {
-            this._editor.setValue(value);
-            this.fp('value', oldValue, value);
+    onPropertyChanged: function(e) {
+        var self = this;
+        ui.MonacoEditor.superClass.onPropertyChanged.call(self, e);
+        if (!self._syncToHT && e.property === 'value') {
+            self.getEditor().setValue(e.newValue);
         }
-    },
-
-    getValue: function () {
-        return this._editor.getValue();
     },
 
     setFormDataValue: function (value) {
