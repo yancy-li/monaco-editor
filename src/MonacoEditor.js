@@ -70,6 +70,13 @@ def(ui.MonacoEditor, ht.ui.HtmlView, {
         this.monacoPkg.editor.setModelLanguage(this.getEditor().getModel(), lang);
     },
 
+    figureScrollSize: function(contentDiv) {
+        var firstChild = contentDiv.firstChild;
+        return {
+            width: firstChild.offsetWidth,
+            height: firstChild.offsetHeight
+        }
+    },
     validateImpl: function (x, y, width, height) {
         var self = this,
             editor = self._editor;
