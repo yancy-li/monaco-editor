@@ -11,16 +11,6 @@ ui.MonacoEditor = function (monaco) {
 
     self.setContent(editorDiv);
 
-    var editor = self._editor = monaco.editor.create(editorDiv, {
-        language: 'javascript'
-    });
-
-    editor.onDidChangeModelContent(function(e) {
-        self._syncToHT = true;
-        self.setValue(editor.getValue());
-        self._syncToHT = false;
-    });
-
     // 组件宽度和高度变化时要设置一个标记通知 Editor 更新
     self.addPropertyChangeListener(function (e) {
         var property = e.property;
@@ -50,7 +40,7 @@ def(ui.MonacoEditor, ht.ui.HtmlView, {
         var self = this;
         ui.MonacoEditor.superClass.onPropertyChanged.call(self, e);
         if (!self._syncToHT && e.property === 'value') {
-            self.getEditor().setValue(e.newValue);
+            self.getEditor() && self.getEditor().setValue(e.newValue);
         }
     },
 
@@ -80,7 +70,18 @@ def(ui.MonacoEditor, ht.ui.HtmlView, {
     validateImpl: function (x, y, width, height) {
         var self = this,
             editor = self._editor;
-
+        if (!editor) {
+            editor = self._editor = monaco.editor.create(self.getContent(), {
+                language: 'javascript'
+            });
+            
+            editor.setValue(self.getValue());
+            editor.onDidChangeModelContent(function(e) {
+                self._syncToHT = true;
+                self.setValue(editor.getValue());
+                self._syncToHT = false;
+            });
+        }
         ht.ui.MonacoEditor.superClass.validateImpl.call(self, x, y, width, height);
 
         if (self._resizeEditor) {
