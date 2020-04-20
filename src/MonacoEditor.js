@@ -22,7 +22,7 @@ ui.MonacoEditor = function (monaco) {
 
 def(ui.MonacoEditor, ht.ui.HtmlView, {
 
-    ms_ac: ['formDataName', 'value'],
+    ms_ac: ['formDataName', 'value', 'language'],
 
     _formDataValueProps: {
         value: true
@@ -42,6 +42,11 @@ def(ui.MonacoEditor, ht.ui.HtmlView, {
         if (!self._syncToHT && e.property === 'value') {
             self.getEditor() && self.getEditor().setValue(e.newValue);
         }
+        if (e.property == 'language') {
+            if (self.getEditor()) {
+                (self.monacoPkg || window.monaco).editor.setModelLanguage(this.getEditor().getModel(), e.newValue);
+            }
+        }
     },
 
     setFormDataValue: function (value) {
@@ -50,14 +55,6 @@ def(ui.MonacoEditor, ht.ui.HtmlView, {
 
     getFormDataValue: function () {
         return this.getValue();
-    },
-
-    getLanguage: function() {
-        return this.getEditor().getModel().getLanguageIdentifier().language;
-    },
-
-    setLanguage: function(lang) {
-        this.monacoPkg.editor.setModelLanguage(this.getEditor().getModel(), lang);
     },
 
     figureScrollSize: function(contentDiv) {
@@ -72,7 +69,7 @@ def(ui.MonacoEditor, ht.ui.HtmlView, {
             editor = self._editor;
         if (!editor) {
             editor = self._editor = monaco.editor.create(self.getContent(), {
-                language: 'javascript'
+                language: self.getLanguage() || 'javascript'
             });
             
             editor.setValue(self.getValue());
