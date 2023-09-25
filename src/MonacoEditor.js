@@ -3,9 +3,9 @@ ui.MonacoEditor = function (monaco) {
         editorDiv = document.createElement('div');
     editorDiv.style.width = '100%';
     editorDiv.style.height = '100%';
-    ht.ui.MonacoEditor.superClass.constructor.call(self);
+    ui.MonacoEditor.superClass.constructor.call(self, monaco && monaco.editor ? NULL : monaco);
 
-    if (!monaco) monaco = window.monaco;
+    if (!monaco || !monaco.editor) monaco = window.monaco;
     
     self.monacoPkg = monaco;
 
